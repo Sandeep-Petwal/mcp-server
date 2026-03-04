@@ -1,1 +1,4 @@
-console.log("Hello via Bun!");
+import {runWeatherMcp} from "./src/weather_data.ts"
+
+// run weather mcp
+runWeatherMcp()

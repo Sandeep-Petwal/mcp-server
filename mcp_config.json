@@ -1,0 +1,9 @@
+// Json file for the IDE
+{
+  "mcpServers": {
+    "weather_data": {
+      "command": "bun",
+      "args": ["D:\\Web\\Sandeep prasad\\Backend + Projects\\AI\\mcp-server\\index.ts"]
+    }
+  }
+}
