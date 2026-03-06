@@ -16,9 +16,11 @@ export function registerWeatherTool(server: McpServer) {
 
     if (!weather) {
       return {
+        // MCP tools return content in a specific format
+        // The content array can contain multiple items of different types
         content: [
           {
-            type: "text" as const,
+            type: "text" as const, // Content type - can be text, image, etc.
             text: `Weather in ${city}: 0°C, Very cold and high chance of snow`,
           },
         ],
@@ -37,24 +39,25 @@ export function registerWeatherTool(server: McpServer) {
 
 
 
+  // This makes the tool available to AI models that connect to this server
   server.registerTool(
-    "get_weather",
+    "get_weather", // Unique tool identifier - used by AI models to call this tool
     {
-      title: "Get Weather",
+      title: "Get Weather", 
       description: "Get weather for a city",
-
       inputSchema: {
         city: z.string(),
       },
 
+      // Tool annotations provide metadata about tool behavior
       annotations: {
-        readOnlyHint: true,
-        destructiveHint: false,
-        idempotentHint: true,
-        openWorldHint: false,
+        readOnlyHint: true,   
+        destructiveHint: false, 
+        idempotentHint: true, 
+        openWorldHint: false,  
       },
     },
-    handleGetWeather
+    handleGetWeather 
   )
 }
 
