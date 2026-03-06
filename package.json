@@ -4,11 +4,15 @@
   "type": "module",
   "private": true,
   "scripts": {
+    "inspact": "DANGEROUSLY_OMIT_AUTH=true && npx @modelcontextprotocol/inspector bun run dev:stdio",
+
     "start:stdio": "bun run Server/stdioMcpServer.ts",
     "start:http": "bun run Server/httpMcpServer.ts",
     "dev:stdio": "nodemon --exec bun run Server/stdioMcpServer.ts",
     "dev:http": "nodemon --exec bun run Server/httpMcpServer.ts",
-    "inspact": "DANGEROUSLY_OMIT_AUTH=true && npx @modelcontextprotocol/inspector bun run dev:stdio"
+
+    "dev:client" : "bun --watch Client/mcpClient.ts",
+    "start:client" : "bun run Client/mcpClient.ts"
   },
   "devDependencies": {
     "@types/bun": "latest",
@@ -19,7 +23,9 @@
     "typescript": "^5"
   },
   "dependencies": {
+    "@inquirer/prompts": "^8.3.0",
     "@modelcontextprotocol/sdk": "^1.27.1",
+    "dotenv": "^17.3.1",
     "express": "^5.2.1"
   }
 }
