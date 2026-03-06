@@ -4,7 +4,8 @@
   "type": "module",
   "private": true,
   "scripts": {
-    "start": "bun run index.ts"
+    "start": "bun run index.ts",
+    "inspact": "DANGEROUSLY_OMIT_AUTH=true && npx @modelcontextprotocol/inspector bun run start"
   },
   "devDependencies": {
     "@types/bun": "latest"

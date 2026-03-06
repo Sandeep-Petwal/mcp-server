@@ -1,1 +1,29 @@
-# mcp-server
+## Running the inspector
+
+```bash
+bun run inspact
+```
+
+## OR
+
+## Calling MCP Manually from Terminal
+
+### Get all tool list
+
+```bash
+{"jsonrpc":"2.0","id":1,"method":"tools/list"}
+```
+
+### Get weather for a city
+
+```bash
+{"jsonrpc":"2.0","id":2,"method":"tools/call","params":{"name":"get_weather","arguments":{"city":"Delhi"}}}
+```
+
+## TOOL
+
+The Model Context Protocol (MCP) allows servers to expose tools that can be invoked by language models. Tools enable models to interact with external systems, such as querying databases, calling APIs, or performing computations. Each tool is uniquely identified by a name and includes metadata describing its schema.
+
+## Resource
+
+The Model Context Protocol (MCP) provides a standardized way for servers to expose resources to clients. Resources allow servers to share data that provides context to language models, such as files, database schemas, or application-specific information. Each resource is uniquely identified by a URI.

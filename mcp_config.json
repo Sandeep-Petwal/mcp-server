@@ -1,9 +1,14 @@
-// Json file for the IDE
+// This is the file for the IDE or local ai apps
+// So that it can connect to the MCP server
+
 {
   "mcpServers": {
     "weather_data": {
       "command": "bun",
-      "args": ["D:\\Web\\Sandeep prasad\\Backend + Projects\\AI\\mcp-server\\index.ts"]
+      "args": [
+        "run",
+        "D:\\Web\\Sandeep prasad\\Backend + Projects\\AI\\mcp-server\\index.ts"
+      ]
     }
   }
 }
