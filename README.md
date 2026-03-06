@@ -1,3 +1,8 @@
+## Must read
+https://github.com/modelcontextprotocol/typescript-sdk
+
+
+
 ## Running the inspector
 
 ```bash

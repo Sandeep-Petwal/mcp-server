@@ -4,10 +4,10 @@
   "type": "module",
   "private": true,
   "scripts": {
-    "start:stdio": "bun run index.ts",
-    "start:http": "bun run httpMcpServer.ts",
-    "dev:stdio": "nodemon --exec bun run index.ts",
-    "dev:http": "nodemon --exec bun run httpMcpServer.ts",
+    "start:stdio": "bun run Server/stdioMcpServer.ts",
+    "start:http": "bun run Server/httpMcpServer.ts",
+    "dev:stdio": "nodemon --exec bun run Server/stdioMcpServer.ts",
+    "dev:http": "nodemon --exec bun run Server/httpMcpServer.ts",
     "inspact": "DANGEROUSLY_OMIT_AUTH=true && npx @modelcontextprotocol/inspector bun run dev:stdio"
   },
   "devDependencies": {

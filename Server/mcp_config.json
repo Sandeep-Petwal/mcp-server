@@ -7,7 +7,7 @@
       "command": "bun",
       "args": [
         "run",
-        "D:\\Web\\Sandeep prasad\\Backend + Projects\\AI\\mcp-server\\index.ts"
+        "D:\\Web\\Sandeep prasad\\Backend + Projects\\AI\\mcp-server\\Server\\stdioMcpServer.ts"
       ]
     },
     "weather_http": {

@@ -5,7 +5,7 @@ import { registerWeatherTool } from "./src/tools/weatherTool.js"
 import { registerUserResources } from "./src/resources/userResources.js"
 import { registerWeatherPrompt } from "./src/prompts/weatherPrompt.js"
 
-// This creates the main server instance that will handle all MCP communications
+// This creates the main instance that will handle all MCP communications
 const server = new McpServer(
   {
     // Server metadata - used by clients to identify and describe this server
