@@ -9,6 +9,9 @@
         "run",
         "D:\\Web\\Sandeep prasad\\Backend + Projects\\AI\\mcp-server\\index.ts"
       ]
+    },
+    "weather_http": {
+      "url": "http://localhost:3000/mcp"
     }
   }
 }
