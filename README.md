@@ -1,12 +1,20 @@
 ## Must read
 https://github.com/modelcontextprotocol/typescript-sdk
 
-
+## View running process
+```bash
+netstat -ano | findstr 3000
+```
 
 ## Running the inspector
-
+For stdio
 ```bash
 bun run inspact
+```
+
+For http 
+```bash
+npx @modelcontextprotocol/inspector http://localhost:3000/mcp
 ```
 
 ## OR
@@ -28,6 +36,11 @@ bun run inspact
 ## TOOL
 
 The Model Context Protocol (MCP) allows servers to expose tools that can be invoked by language models. Tools enable models to interact with external systems, such as querying databases, calling APIs, or performing computations. Each tool is uniquely identified by a name and includes metadata describing its schema.
+
+Tool calling (function calling from client)
+
+![Function Calling Diagram](static/images/function-calling-diagram-steps.png)
+ 
 
 ## Resource
 

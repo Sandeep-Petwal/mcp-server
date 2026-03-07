@@ -1,8 +1,13 @@
-import { input, select } from "@inquirer/prompts";
+import { select } from "@inquirer/prompts";
 import { Client } from "@modelcontextprotocol/sdk/client";
 import { StreamableHTTPClientTransport } from "@modelcontextprotocol/sdk/client/streamableHttp.js";
-import type { Tool } from "@modelcontextprotocol/sdk/types.js";
 
+import { ToolHandler } from "./handlers/toolHandler.js";
+import { ResourceHandler } from "./handlers/resourceHandler.js";
+import { PromptHandler } from "./handlers/promptHandler.js";
+import { ShutdownHandler } from "./handlers/shutdownHandler.js";
+import OpenAI from "openai";
+import { QueryHandler } from "./handlers/queryHandler.js";
 
 const mcpClient = new Client({
     name: "test_client",
@@ -25,81 +30,63 @@ const transport = new StreamableHTTPClientTransport(serverUrl)
 
 
 
-
-// Main client function 
 const runClient = async () => {
 
-    // Connect to the client
     await mcpClient.connect(transport);
     console.log("Mcp client connected successfully.")
 
     // Get all the available tools/resources/prompts from the server
-    const [tools, resources, prompts] = await Promise.all([
+    // here resourceTemplates are resources with dynamic URI patterns
+    const [tools, { resources }, { resourceTemplates }, { prompts }] = await Promise.all([
         mcpClient.listTools(),
         mcpClient.listResources(),
+        mcpClient.listResourceTemplates(),
         mcpClient.listPrompts()
     ])
 
-    // console.log('tools', tools)
-    console.log('resources', resources)
+    // Initialize handlers
+    const toolHandler = new ToolHandler(mcpClient);
+    const resourceHandler = new ResourceHandler(mcpClient);
+    const promptHandler = new PromptHandler(mcpClient);
+    const queryHandler = new QueryHandler(mcpClient);
+
+    console.log('tools.tools', tools.tools)
+    // console.log('resources', resources)
+    // console.log('ResourceTemplate', resourceTemplates)
     // console.log('prompts', prompts)
 
 
-    // Cli logic
+    // to keep the cli logic running
     while (true) {
-
         // Read the input option from the clie
         const options = await select({
             message: "What would you like to do ?",
-            choices: ['Query', 'Tools', 'Resources', 'Prompts']
+            choices: ['Query', 'Tools', 'Resources', 'Prompts', 'Exit']
         })
 
         switch (options) {
+            case 'Query':
+                await queryHandler.handleQuery(tools.tools);
+                break;
             case 'Tools':
-                console.log("Running Tool");
-                const toolName = await select({
-                    message: "Please select a tool!",
-                    choices: tools.tools.map(t => ({
-                        name: t.title || t.name,
-                        value: t.title || t.name,
-                        descrption: t.description || ''
-                    })),
-                })
-
-                console.log('toolName', toolName)
-                const tool = tools.tools.find(t => t.title == toolName);
-
-                if (!tool) {
-                    console.error("Tool not fount");
-                } else {
-                    await handleRunTool(tool);
-                }
+                await toolHandler.handleTools(tools.tools);
                 break;
 
             case 'Resources':
-                console.log("Running Tool");
-                const resourceUrl = await select({
-                    message: "Please select a resource!",
-                    choices: resources.resources.map(t => ({
-                        name: t.title || t.name,
-                        value: t.uri,
-                        descrption: t.description || ''
-                    })),
-                })
+                await resourceHandler.handleResources(resources, resourceTemplates);
+                break;
 
-                console.log('resourceUrl', resourceUrl)
-                const uri = resources.resources.find(t => t.uri == resourceUrl)?.uri
+            case 'Prompts':
+                await promptHandler.handlePrompts(prompts);
+                break;
 
-                if (!uri) {
-                    console.error("Tool not fount");
-                } else {
-                    await handleResource(uri);
-                }
-
-
+            case 'Exit':
+                console.log("Exiting client...");
+                await shutdownHandler.gracefulShutdown();
+                return;
 
             default:
-
+                console.log("Invalid option. Please choose a valid option.");
         }
     }
 
@@ -107,34 +94,10 @@ const runClient = async () => {
 
 
 
-// Run a tool
-const handleRunTool = async (tool: Tool) => {
-
-    const args: Record<string, string> = {}
-    const toolInputOptions = tool.inputSchema.properties || {}
-
-    for (const [key, value] of Object.entries(toolInputOptions)) {
-        args[key] = await input({
-            message: `Enter value for (${key} ${(value as { type: string }).type}) : `
-        })
-    }
-
-
-    // call the tool
-    const res = await mcpClient.callTool({
-        name: tool.name,
-        arguments: args
-    })
-
-    console.log((res.content as [{ text: string }])[0].text)
-
-}
-
-// Handle resource type
-const handleResource = async (uri : string) => {
-
-}
-
-
 
 runClient();
+
+
+// Initialize shutdown handlers
+const shutdownHandler = new ShutdownHandler(mcpClient, transport);
+shutdownHandler.initializeHandlers();

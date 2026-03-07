@@ -8,6 +8,8 @@ import { registerWeatherTool } from "./src/tools/weatherTool.js"
 import { registerUserResources } from "./src/resources/userResources.js"
 import { registerWeatherPrompt } from "./src/prompts/weatherPrompt.js"
 
+console.log("PID:", process.pid)
+
 const app = createMcpExpressApp()
 
 function createServer() {
@@ -39,6 +41,8 @@ function createServer() {
 app.post("/mcp", async (req, res) => {
     console.error("Request received at /mcp:", req.method, req.url)
 
+    // stateless server
+    // every request creates a new MCP server instance
     const server = createServer()
 
     try {
@@ -66,28 +70,50 @@ app.post("/mcp", async (req, res) => {
         console.error("MCP error:", error)
 
         if (!res.headersSent) {
-            res.status(500).json({
-                jsonrpc: "2.0",
-                error: {
-                    code: -32603,
-                    message: "Internal server error"
-                },
-                id: null
-            })
+            res.status(500).json({ jsonrpc: "2.0", error: { code: -32603, message: "Internal server error" }, id: null })
         }
     }
 })
 
-const PORT = 3000
 
-app.listen(PORT, () => {
-    console.log(`MCP HTTP server running at http://localhost:${PORT}/mcp`)
+
+app.get("/mcp", (req, res) => {
+    res.status(405).json({ jsonrpc: "2.0", error: { code: -32000, message: "Method not allowed" }, id: null })
+})
+
+app.delete("/mcp", (req, res) => {
+    res.status(405).json({ jsonrpc: "2.0", error: { code: -32000, message: "Method not allowed" }, id: null })
 })
 
 
+const PORT = 3000
 
+try {
+    const server = app.listen(PORT, () => {
+        console.log(`MCP HTTP server running at http://localhost:${PORT}/mcp`)
+    })
 
+    // Graceful shutdown
+    process.on('SIGINT', () => {
+        console.log('Received SIGINT, shutting down gracefully')
+        server.close(() => {
+            console.log('Server closed')
+            process.exit(0)
+        })
+    })
 
+    process.on('SIGTERM', () => {
+        console.log('Received SIGTERM, shutting down gracefully')
+        server.close(() => {
+            console.log('Server closed')
+            process.exit(0)
+        })
+    })
+
+} catch (error) {
+    console.error("Failed to start server:", error)
+    process.exit(1)
+}
 
 
 

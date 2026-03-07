@@ -35,7 +35,7 @@ export function registerWeatherPrompt(server: McpServer) {
             role: "user", // User message that provides the actual task
             content: {
               type: "text",
-              text: `City: ${city}Temperature: ${temperature} Condition: ${condition}Give practical advice for someone going outside.`
+              text: `City: ${city} Temperature: ${temperature} Condition: ${condition} Give practical advice for someone going outside.`
             },
           },
         ],

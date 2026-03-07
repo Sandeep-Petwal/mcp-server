@@ -1,0 +1,10 @@
+{
+  "watch": ["Server"],
+  "ext": "ts,json",
+  "ignore": [
+    "node_modules",
+    ".git",
+    "dist",
+    "Client"
+  ]
+}
