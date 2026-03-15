@@ -10,16 +10,12 @@ export class ShutdownHandler {
     // graceful shutdown function
     async gracefulShutdown() {
         try {
-            console.log("Closing MCP client connection...");
-
             if (this.client) {
                 await this.client.close();
-                console.log("MCP client closed successfully.");
             }
 
             if (this.transport) {
                 await this.transport.close();
-                console.log("Transport closed successfully.");
             }
 
             console.log("Graceful shutdown completed.");
@@ -34,18 +30,15 @@ export class ShutdownHandler {
     initializeHandlers() {
         // Handle process signals for graceful shutdown
         process.on('SIGINT', async () => {
-            console.log("\nReceived SIGINT (Ctrl+C). Initiating graceful shutdown...");
             await this.gracefulShutdown();
         });
 
         process.on('SIGTERM', async () => {
-            console.log("\nReceived SIGTERM. Initiating graceful shutdown...");
             await this.gracefulShutdown();
         });
 
         // Handle uncaught exceptions
         process.on('uncaughtException', async (error) => {
-            console.error("Uncaught Exception:", error);
             await this.gracefulShutdown();
         });
 

@@ -10,6 +10,7 @@
     "start:http": "bun run Server/httpMcpServer.ts",
     "dev:stdio": "nodemon --exec bun run Server/stdioMcpServer.ts",
     "dev:http": "nodemon --exec bun run Server/httpMcpServer.ts",
+    
     "dev:client": "bun --watch Client/mcpClient.ts",
     "start:client": "bun run Client/mcpClient.ts"
   },

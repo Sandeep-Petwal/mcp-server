@@ -57,7 +57,7 @@ export class PromptHandler {
 
         if (runPrompt) {
             // get the api key first
-            const apiKey = await input({
+            const apiKey = process.env.GEMINI_API_KEY || await input({
                 message: `Please provide the gemin api key  : `
             });
 
@@ -84,11 +84,11 @@ export class PromptHandler {
         try {
             console.warn("Thinking ......")
             const response = await openai.chat.completions.create({
-                model: "gemini-3-flash-preview",
+                model: "gemini-2.5-flash-lite",
                 messages: constructedMessage
             });
 
-            console.log(response.choices[0].message.content);
+            console.log(response.choices?.[0]?.message?.content ?? "");
 
         } catch (error) {
             console.error("Error calling AI API:", error);

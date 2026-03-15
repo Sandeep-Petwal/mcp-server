@@ -50,7 +50,7 @@ const runClient = async () => {
     const promptHandler = new PromptHandler(mcpClient);
     const queryHandler = new QueryHandler(mcpClient);
 
-    console.log('tools.tools', tools.tools)
+    // console.log('tools.tools', tools.tools)
     // console.log('resources', resources)
     // console.log('ResourceTemplate', resourceTemplates)
     // console.log('prompts', prompts)
@@ -65,7 +65,7 @@ const runClient = async () => {
         })
 
         switch (options) {
-            case 'Query':
+            case 'Query': // With tool calling
                 await queryHandler.handleQuery(tools.tools);
                 break;
             case 'Tools':
